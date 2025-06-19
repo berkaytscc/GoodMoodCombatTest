@@ -74,8 +74,8 @@ public class DummyPuppet : MonoBehaviour, IDamageable
                 _damageNumberPrefab,
                 _damageNumberSpawnPoint.position,
                 Quaternion.identity);
-            //if (go.TryGetComponent<DamageNumber>(out var popup))
-            //    popup.SetValue(amount);
+            if (go.TryGetComponent<FloatingDamage>(out var popup))
+                popup.SetValue(amount);
         }
 
         if (_hitVFX != null) Instantiate(_hitVFX, transform.position, Quaternion.identity).Play();
@@ -90,20 +90,16 @@ public class DummyPuppet : MonoBehaviour, IDamageable
 
     private void Die()
     {
-        // play death VFX/SFX
         if (_deathVFX != null) Instantiate(_deathVFX, transform.position, Quaternion.identity).Play();
         if (_deathSFX != null) _audio.PlayOneShot(_deathSFX);
 
-        // death animation
         _anim.SetTrigger("Die");
 
-        // disable visuals & collisions
         foreach (var c in _colliders) c.enabled = false;
         foreach (var r in _renderers) r.enabled = false;
         if (_healthBarSlider != null)
             _healthBarSlider.gameObject.SetActive(false);
 
-        // schedule respawn
         StartCoroutine(RespawnRoutine());
     }
 
@@ -111,11 +107,9 @@ public class DummyPuppet : MonoBehaviour, IDamageable
     {
         yield return new WaitForSeconds(_respawnDelay);
 
-        // reset transform
         transform.position = _startPos;
         transform.rotation = _startRot;
 
-        // restore health & UI
         _currentHealth = _maxHealth;
         if (_healthBarSlider != null)
         {
@@ -123,11 +117,9 @@ public class DummyPuppet : MonoBehaviour, IDamageable
             _healthBarSlider.value = _currentHealth;
         }
 
-        // re-enable visuals & collisions
         foreach (var c in _colliders) c.enabled = true;
         foreach (var r in _renderers) r.enabled = true;
 
-        // reset animation to Idle
         _anim.ResetTrigger("Die");
         _anim.Play("Idle", 0, 0f);
     }
