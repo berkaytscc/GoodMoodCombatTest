@@ -1,5 +1,6 @@
-using Unity.Cinemachine;
+﻿using Unity.Cinemachine;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 [RequireComponent(typeof(CharacterController), typeof(InputBridge), typeof(Animator))]
 public class ThirdPersonController : MonoBehaviour
@@ -19,12 +20,22 @@ public class ThirdPersonController : MonoBehaviour
     [Tooltip("Damp time for blending animation parameters")]
     [SerializeField] private float _animDampTime = 0.1f;
 
+    [SerializeField] private Transform lockOnTarget;
+
+    // --- Combo/Attack System ---
+    [Header("Combat Settings")]
+    [SerializeField] private int _maxCombo = 3;
+    [SerializeField] private float _comboResetTime = 1.0f; // Time window to chain next attack
+
     private InputBridge _inputBridge;
     private CharacterController _controller;
     private Animator _animator;
     private Vector3 _velocity;
     private float _turnSmoothVelocity;
     private bool _isLockOnActive;
+    private int _currentCombo = 0;
+    private float _lastAttackTime = -999f;
+    private bool _isAttacking = false;
 
     private void Awake()
     {
@@ -38,14 +49,24 @@ public class ThirdPersonController : MonoBehaviour
 
     private void Update()
     {
+        //TODO: change to new input system later
+        if (Keyboard.current.tabKey.wasPressedThisFrame)
+        {
+            _isLockOnActive = !_isLockOnActive;
+
+            if (_vCamFreeLook != null && _vCamLockOn != null)
+            {
+                _vCamLockOn.Priority = _vCamFreeLook.Priority + (_isLockOnActive ? 1 : -1);
+            }
+        }
+
         ApplyGravity();
-        Move();
         UpdateAnimator();
 
-        if(Input.GetKeyDown(KeyCode.Tab))
-        {
-            LockOnTarget(!_isLockOnActive);
-        }
+        if (_isLockOnActive)
+            StrafeMove();
+        else
+            FreeMove();
     }
 
     public void LockOnTarget(bool active)
@@ -63,34 +84,45 @@ public class ThirdPersonController : MonoBehaviour
         _controller.Move(_velocity * Time.deltaTime);
     }
 
-    private void Move()
+    private void FreeMove()
     {
-        Vector2 mi = _inputBridge != null
-                     ? _inputBridge.MoveInput
-                     : Vector2.zero;
-
+        Vector2 mi = _inputBridge.MoveInput;
         Vector3 inputDir = new Vector3(mi.x, 0f, mi.y).normalized;
-        if (inputDir.sqrMagnitude < 0.01f)
-            return;
+        if (inputDir.sqrMagnitude < 0.01f) return;
 
         float inputAngle = Mathf.Atan2(inputDir.x, inputDir.z) * Mathf.Rad2Deg;
-
-        float camYaw = _cinemachineCamera != null
-                       ? _cinemachineCamera.transform.eulerAngles.y
-                       : 0f;
-
+        float camYaw = _cinemachineCamera.transform.eulerAngles.y;
         float targetAngle = inputAngle + camYaw;
 
-        float smoothedAngle = Mathf.SmoothDampAngle(
+        float smooth = Mathf.SmoothDampAngle(
             transform.eulerAngles.y,
             targetAngle,
             ref _turnSmoothVelocity,
             _turnSmoothTime
         );
-        transform.rotation = Quaternion.Euler(0f, smoothedAngle, 0f);
+        transform.rotation = Quaternion.Euler(0f, smooth, 0f);
 
         Vector3 moveDir = Quaternion.Euler(0f, targetAngle, 0f) * Vector3.forward;
         _controller.Move(moveDir * _walkSpeed * Time.deltaTime);
+    }
+
+    private void StrafeMove()
+    {
+        if (lockOnTarget == null) return;
+
+        Vector2 mi = _inputBridge.MoveInput;
+        Vector3 toTarget = lockOnTarget.position - transform.position;
+        toTarget.y = 0f;
+
+        if (toTarget.sqrMagnitude > 0.01f)
+            transform.rotation = Quaternion.LookRotation(toTarget.normalized, Vector3.up);
+
+        Vector3 forward = toTarget.normalized;
+        Vector3 right = Vector3.Cross(Vector3.up, forward);
+        Vector3 moveDir = forward * mi.y + right * mi.x;
+
+        if (moveDir.sqrMagnitude > 0.01f)
+            _controller.Move(moveDir * _walkSpeed * Time.deltaTime);
     }
 
     private void UpdateAnimator()
