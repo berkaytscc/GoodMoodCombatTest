@@ -1,3 +1,4 @@
+using Unity.Cinemachine;
 using UnityEngine;
 
 [RequireComponent(typeof(CharacterController), typeof(InputBridge), typeof(Animator))]
@@ -6,6 +7,8 @@ public class ThirdPersonController : MonoBehaviour
     [Header("References")]
     [Tooltip("Main Camera that has a CinemachineBrain on it")]
     [SerializeField] private Camera _cinemachineCamera;
+    [SerializeField] private CinemachineCamera _vCamFreeLook;
+    [SerializeField] private CinemachineCamera _vCamLockOn;
 
     [Header("Movement Settings")]
     [SerializeField] private float _walkSpeed = 5f;
@@ -21,6 +24,7 @@ public class ThirdPersonController : MonoBehaviour
     private Animator _animator;
     private Vector3 _velocity;
     private float _turnSmoothVelocity;
+    private bool _isLockOnActive;
 
     private void Awake()
     {
@@ -37,6 +41,17 @@ public class ThirdPersonController : MonoBehaviour
         ApplyGravity();
         Move();
         UpdateAnimator();
+
+        if(Input.GetKeyDown(KeyCode.Tab))
+        {
+            LockOnTarget(!_isLockOnActive);
+        }
+    }
+
+    public void LockOnTarget(bool active)
+    {
+        _vCamLockOn.Priority = _vCamFreeLook.Priority + (active ? 1 : - 1);
+        _isLockOnActive = active;
     }
 
     private void ApplyGravity()
