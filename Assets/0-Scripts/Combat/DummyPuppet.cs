@@ -1,0 +1,134 @@
+﻿using UnityEngine;
+using UnityEngine.UI;
+using System.Collections;
+
+[RequireComponent(typeof(Animator), typeof(AudioSource))]
+public class DummyPuppet : MonoBehaviour, IDamageable
+{
+    [Header("Health Settings")]
+    [Tooltip("Maximum HP of the dummy")]
+    [SerializeField] private float _maxHealth = 100f;
+    [Tooltip("Seconds to wait before auto-respawn")]
+    [SerializeField] private float _respawnDelay = 5f;
+
+    [Header("Feedback Prefabs")]
+    [SerializeField] private ParticleSystem _hitVFX;
+    [SerializeField] private ParticleSystem _deathVFX;
+    [SerializeField] private AudioClip _hitSFX;
+    [SerializeField] private AudioClip _deathSFX;
+
+    [Header("Damage Popup")]
+    [SerializeField] private GameObject _damageNumberPrefab;
+    [SerializeField] private Transform _damageNumberSpawnPoint;
+
+    [Header("UI (World‐Space)")]
+    [SerializeField] private Slider _healthBarSlider;
+
+    private float _currentHealth;
+    private Animator _anim;
+    private AudioSource _audio;
+    private Vector3 _startPos;
+    private Quaternion _startRot;
+    private Collider[] _colliders;
+    private Renderer[] _renderers;
+
+    private void Awake()
+    {
+        _anim = GetComponent<Animator>();
+        _audio = GetComponent<AudioSource>();
+        _startPos = transform.position;
+        _startRot = transform.rotation;
+        _colliders = GetComponentsInChildren<Collider>();
+        _renderers = GetComponentsInChildren<Renderer>();
+
+        // initialize health
+        _currentHealth = _maxHealth;
+        _anim.SetFloat("CurrentHealth", _currentHealth);
+        if (_healthBarSlider != null)
+        {
+            _healthBarSlider.maxValue = _maxHealth;
+            _healthBarSlider.value = _currentHealth;
+        }
+    }
+
+    private void Update()
+    {
+        if(Input.GetKeyDown(KeyCode.K))
+        {
+            TakeDamage(20f);
+        }
+    }
+
+    public void TakeDamage(float amount)
+    {
+        if (_currentHealth <= 0f) return;
+
+        _currentHealth = Mathf.Max(_currentHealth - amount, 0f);
+
+        if (_healthBarSlider != null)
+            _healthBarSlider.value = _currentHealth;
+
+        if (_damageNumberPrefab != null && _damageNumberSpawnPoint != null)
+        {
+            var go = Instantiate(
+                _damageNumberPrefab,
+                _damageNumberSpawnPoint.position,
+                Quaternion.identity);
+            //if (go.TryGetComponent<DamageNumber>(out var popup))
+            //    popup.SetValue(amount);
+        }
+
+        if (_hitVFX != null) Instantiate(_hitVFX, transform.position, Quaternion.identity).Play();
+        if (_hitSFX != null) _audio.PlayOneShot(_hitSFX);
+
+        _anim.SetTrigger("Hit");
+
+        _anim.SetFloat("CurrentHealth", _currentHealth);
+        if (_currentHealth <= 0f)
+            Die();
+    }
+
+    private void Die()
+    {
+        // play death VFX/SFX
+        if (_deathVFX != null) Instantiate(_deathVFX, transform.position, Quaternion.identity).Play();
+        if (_deathSFX != null) _audio.PlayOneShot(_deathSFX);
+
+        // death animation
+        _anim.SetTrigger("Die");
+
+        // disable visuals & collisions
+        foreach (var c in _colliders) c.enabled = false;
+        foreach (var r in _renderers) r.enabled = false;
+        if (_healthBarSlider != null)
+            _healthBarSlider.gameObject.SetActive(false);
+
+        // schedule respawn
+        StartCoroutine(RespawnRoutine());
+    }
+
+    private IEnumerator RespawnRoutine()
+    {
+        yield return new WaitForSeconds(_respawnDelay);
+
+        // reset transform
+        transform.position = _startPos;
+        transform.rotation = _startRot;
+
+        // restore health & UI
+        _currentHealth = _maxHealth;
+        if (_healthBarSlider != null)
+        {
+            _healthBarSlider.gameObject.SetActive(true);
+            _healthBarSlider.value = _currentHealth;
+        }
+
+        // re-enable visuals & collisions
+        foreach (var c in _colliders) c.enabled = true;
+        foreach (var r in _renderers) r.enabled = true;
+
+        // reset animation to Idle
+        _anim.ResetTrigger("Die");
+        _anim.Play("Idle", 0, 0f);
+    }
+}
