@@ -1,6 +1,6 @@
 # GoodMoodCombatTest
 
-Hey there! 👋 Welcome to **GoodMoodCombatTest** – a Unity project where you can mess around with a third-person character, try out some combo-based sword combat, and whack some dummies for science (or fun, whatever works).
+Welcome to **GoodMoodCombatTest**
 
 ## What's This?
 This is a little playground for testing out:
