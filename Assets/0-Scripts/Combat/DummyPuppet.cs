@@ -51,14 +51,6 @@ public class DummyPuppet : MonoBehaviour, IDamageable
         }
     }
 
-    private void Update()
-    {
-        if(Input.GetKeyDown(KeyCode.K))
-        {
-            TakeDamage(20f);
-        }
-    }
-
     public void TakeDamage(float amount)
     {
         if (_currentHealth <= 0f) return;
@@ -84,6 +76,7 @@ public class DummyPuppet : MonoBehaviour, IDamageable
         _anim.SetTrigger("Hit");
 
         _anim.SetFloat("CurrentHealth", _currentHealth);
+        _anim.SetBool("CanRespawn", false);
         if (_currentHealth <= 0f)
             Die();
     }
@@ -95,8 +88,6 @@ public class DummyPuppet : MonoBehaviour, IDamageable
 
         _anim.SetTrigger("Die");
 
-        foreach (var c in _colliders) c.enabled = false;
-        foreach (var r in _renderers) r.enabled = false;
         if (_healthBarSlider != null)
             _healthBarSlider.gameObject.SetActive(false);
 
@@ -106,6 +97,7 @@ public class DummyPuppet : MonoBehaviour, IDamageable
     private IEnumerator RespawnRoutine()
     {
         yield return new WaitForSeconds(_respawnDelay);
+        _anim.SetBool("CanRespawn", true);
 
         transform.position = _startPos;
         transform.rotation = _startRot;
@@ -119,8 +111,5 @@ public class DummyPuppet : MonoBehaviour, IDamageable
 
         foreach (var c in _colliders) c.enabled = true;
         foreach (var r in _renderers) r.enabled = true;
-
-        _anim.ResetTrigger("Die");
-        _anim.Play("Idle", 0, 0f);
     }
 }
