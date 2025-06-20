@@ -7,11 +7,18 @@ public class PlayerCombat : MonoBehaviour
     [Tooltip("Number of hits in your combo")]
     [SerializeField] private int _maxComboStage = 3;
 
+    [Header("Hitbox")]
     [SerializeField] private SwordHitBox _swordHitBox;
+
+    [Header("SFX")]
+    [Tooltip("Assign your 6 swoosh AudioClips here")]
+    [SerializeField] private AudioClip[] _swooshClips;
 
     // internal state
     private InputBridge _input;
     private Animator _anim;
+    private AudioSource _audio;
+
     private int _comboStage;
     private bool _isAttacking;
     private bool _comboBuffered;
@@ -21,10 +28,19 @@ public class PlayerCombat : MonoBehaviour
     {
         _input = GetComponent<InputBridge>();
         _anim = GetComponent<Animator>();
+        _audio = GetComponent<AudioSource>();
     }
 
     private void OnEnable() => _input.OnAttackPerformed += HandleAttackInput;
     private void OnDisable() => _input.OnAttackPerformed -= HandleAttackInput;
+
+    public void PlaySwordSwingSFX()
+    {
+        if (_swooshClips == null || _swooshClips.Length == 0) return;
+
+        var clip = _swooshClips[Random.Range(0, _swooshClips.Length)];
+        _audio.PlayOneShot(clip);
+    }
 
     public void OnComboWindowOpen()
     {
@@ -49,6 +65,8 @@ public class PlayerCombat : MonoBehaviour
             Debug.Log("[Combat] No buffer → ResetCombo");
             ResetCombo();
         }
+
+        _input.EnableMovement(true);
     }
 
     public void EnableSwordHitBoxExternal()
@@ -86,6 +104,8 @@ public class PlayerCombat : MonoBehaviour
             _comboBuffered = true;
             Debug.Log("[Combat] Combo buffered for next stage");
         }
+
+        _input.EnableMovement(false);
     }
 
     private void ResetCombo()

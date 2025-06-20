@@ -24,7 +24,11 @@ public class InputBridge : MonoBehaviour
         SetCursorState(false);
     }
 
-    public void EnableMovement(bool enable) => _canMove = enable;
+    public void EnableMovement(bool enable)
+    {
+        if(!enable) _moveInput = Vector2.zero;
+        _canMove = enable;
+    }
     public void EnableAttacking(bool enable) => _canAttack = enable;
 
     public void OnMove(InputAction.CallbackContext context)

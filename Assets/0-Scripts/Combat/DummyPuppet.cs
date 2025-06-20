@@ -1,10 +1,15 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
 using System.Collections;
+using System;
 
 [RequireComponent(typeof(Animator), typeof(AudioSource))]
 public class DummyPuppet : MonoBehaviour, IDamageable
 {
+    public event Action<float, float> OnHealthChanged;
+    public float MaxHealth => _maxHealth;
+    public float CurrentHealth => _currentHealth;
+
     [Header("Health Settings")]
     [Tooltip("Maximum HP of the dummy")]
     [SerializeField] private float _maxHealth = 100f;
@@ -57,6 +62,8 @@ public class DummyPuppet : MonoBehaviour, IDamageable
 
         _currentHealth = Mathf.Max(_currentHealth - amount, 0f);
 
+        OnHealthChanged?.Invoke(_currentHealth, _maxHealth);
+
         if (_healthBarSlider != null)
             _healthBarSlider.value = _currentHealth;
 
@@ -103,6 +110,8 @@ public class DummyPuppet : MonoBehaviour, IDamageable
         transform.rotation = _startRot;
 
         _currentHealth = _maxHealth;
+        OnHealthChanged?.Invoke(_currentHealth, _maxHealth);
+
         if (_healthBarSlider != null)
         {
             _healthBarSlider.gameObject.SetActive(true);
