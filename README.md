@@ -21,4 +21,13 @@ This is a little playground for testing out:
 1. Open the `Showcase` scene (in the `Scenes` folder).
 2. Move around with WASD, attack with MLB (check InputBridge for bindings), and try locking on to a dummy with Tab.
 
+## Prerequisites
+
+This project requires the following:
+
+- **Unity**: Version 6 (6000.0.42f1) with the High Definition Render Pipeline (HDRP)  
+- **TextMeshPro**: TextMesh Pro package for floating damages 
+- **Cinemachine**: Package for camera controls  
+- **Input System**: Unity’s New Input System package for handling player input  
+
 ---
