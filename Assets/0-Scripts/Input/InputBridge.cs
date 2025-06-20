@@ -6,6 +6,7 @@ using UnityEngine.InputSystem;
 public class InputBridge : MonoBehaviour
 {
     public event Action OnAttackPerformed;
+    public event Action OnStrafePerformed;
 
     public Vector2 MoveInput => _moveInput;
 
@@ -43,6 +44,12 @@ public class InputBridge : MonoBehaviour
 
         if (ctx.started)
             OnAttackPerformed?.Invoke();
+    }
+
+    public void OnStrafe(InputAction.CallbackContext ctx)
+    {
+        if (ctx.started)
+            OnStrafePerformed?.Invoke();
     }
 
     private void SetCursorState(bool value)

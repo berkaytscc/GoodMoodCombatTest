@@ -45,21 +45,12 @@ public class ThirdPersonController : MonoBehaviour
 
         if (_cinemachineCamera == null && Camera.main != null)
             _cinemachineCamera = Camera.main;
+
+        _inputBridge.OnStrafePerformed += OnStrafe;
     }
 
     private void Update()
     {
-        //TODO: change to new input system later
-        if (Keyboard.current.tabKey.wasPressedThisFrame)
-        {
-            _isLockOnActive = !_isLockOnActive;
-
-            if (_vCamFreeLook != null && _vCamLockOn != null)
-            {
-                _vCamLockOn.Priority = _vCamFreeLook.Priority + (_isLockOnActive ? 1 : -1);
-            }
-        }
-
         ApplyGravity();
         UpdateAnimator();
 
@@ -69,10 +60,14 @@ public class ThirdPersonController : MonoBehaviour
             FreeMove();
     }
 
-    public void LockOnTarget(bool active)
+    public void OnStrafe()
     {
-        _vCamLockOn.Priority = _vCamFreeLook.Priority + (active ? 1 : - 1);
-        _isLockOnActive = active;
+        _isLockOnActive = !_isLockOnActive;
+
+        if (_vCamFreeLook != null && _vCamLockOn != null)
+        {
+            _vCamLockOn.Priority = _vCamFreeLook.Priority + (_isLockOnActive ? 1 : -1);
+        }
     }
 
     private void ApplyGravity()
@@ -147,5 +142,10 @@ public class ThirdPersonController : MonoBehaviour
         _animator.SetFloat("Horizontal", h, _animDampTime, Time.deltaTime);
         _animator.SetFloat("Vertical", v, _animDampTime, Time.deltaTime);
         _animator.SetFloat("Speed", speed);
+    }
+
+    private void OnDisable()
+    {
+        _inputBridge.OnStrafePerformed -= OnStrafe;
     }
 }

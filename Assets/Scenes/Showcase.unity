@@ -9007,6 +9007,46 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 1585178094014626822, guid: 9bd72731ebe2248478ba4849c274a43b, type: 3}
+      propertyPath: m_ActionEvents.Array.size
+      value: 20
+      objectReference: {fileID: 0}
+    - target: {fileID: 1585178094014626822, guid: 9bd72731ebe2248478ba4849c274a43b, type: 3}
+      propertyPath: m_ActionEvents.Array.data[19].m_ActionId
+      value: ac47907a-654a-4585-af52-01bc0255bb4b
+      objectReference: {fileID: 0}
+    - target: {fileID: 1585178094014626822, guid: 9bd72731ebe2248478ba4849c274a43b, type: 3}
+      propertyPath: m_ActionEvents.Array.data[19].m_ActionName
+      value: 'Player/Strafe[/Keyboard/tab]'
+      objectReference: {fileID: 0}
+    - target: {fileID: 1585178094014626822, guid: 9bd72731ebe2248478ba4849c274a43b, type: 3}
+      propertyPath: m_ActionEvents.Array.data[19].m_PersistentCalls.m_Calls.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1585178094014626822, guid: 9bd72731ebe2248478ba4849c274a43b, type: 3}
+      propertyPath: m_ActionEvents.Array.data[19].m_PersistentCalls.m_Calls.Array.data[0].m_Mode
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1585178094014626822, guid: 9bd72731ebe2248478ba4849c274a43b, type: 3}
+      propertyPath: m_ActionEvents.Array.data[19].m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 1457295051}
+    - target: {fileID: 1585178094014626822, guid: 9bd72731ebe2248478ba4849c274a43b, type: 3}
+      propertyPath: m_ActionEvents.Array.data[19].m_PersistentCalls.m_Calls.Array.data[0].m_CallState
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 1585178094014626822, guid: 9bd72731ebe2248478ba4849c274a43b, type: 3}
+      propertyPath: m_ActionEvents.Array.data[19].m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: OnStrafe
+      objectReference: {fileID: 0}
+    - target: {fileID: 1585178094014626822, guid: 9bd72731ebe2248478ba4849c274a43b, type: 3}
+      propertyPath: m_ActionEvents.Array.data[19].m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
+      value: ThirdPersonController, Assembly-CSharp
+      objectReference: {fileID: 0}
+    - target: {fileID: 1585178094014626822, guid: 9bd72731ebe2248478ba4849c274a43b, type: 3}
+      propertyPath: m_ActionEvents.Array.data[19].m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
+      value: UnityEngine.Object, UnityEngine
+      objectReference: {fileID: 0}
     - target: {fileID: 1891586917064873039, guid: 9bd72731ebe2248478ba4849c274a43b, type: 3}
       propertyPath: m_LocalRotation.w
       value: 0.98447025
@@ -9173,6 +9213,17 @@ PrefabInstance:
       insertIndex: -1
       addedObject: {fileID: 2047494531}
   m_SourcePrefab: {fileID: 100100000, guid: 9bd72731ebe2248478ba4849c274a43b, type: 3}
+--- !u!114 &1457295051 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 3121788034893385741, guid: 9bd72731ebe2248478ba4849c274a43b, type: 3}
+  m_PrefabInstance: {fileID: 1457295050}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1853598522}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 85d007bcc9a3c9e45879e5f1e01aa5b9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1508763320
 GameObject:
   m_ObjectHideFlags: 0
