@@ -16,9 +16,7 @@ public class DummyPuppet : MonoBehaviour, IDamageable
     [Tooltip("Seconds to wait before auto-respawn")]
     [SerializeField] private float _respawnDelay = 5f;
 
-    [Header("Feedback Prefabs")]
-    [SerializeField] private ParticleSystem _hitVFX;
-    [SerializeField] private ParticleSystem _deathVFX;
+    [Header("SFX")]
     [SerializeField] private AudioClip _hitSFX;
     [SerializeField] private AudioClip _deathSFX;
 
@@ -46,7 +44,6 @@ public class DummyPuppet : MonoBehaviour, IDamageable
         _colliders = GetComponentsInChildren<Collider>();
         _renderers = GetComponentsInChildren<Renderer>();
 
-        // initialize health
         _currentHealth = _maxHealth;
         _anim.SetFloat("CurrentHealth", _currentHealth);
         if (_healthBarSlider != null)
@@ -77,7 +74,6 @@ public class DummyPuppet : MonoBehaviour, IDamageable
                 popup.SetValue(amount);
         }
 
-        if (_hitVFX != null) Instantiate(_hitVFX, transform.position, Quaternion.identity).Play();
         if (_hitSFX != null) _audio.PlayOneShot(_hitSFX);
 
         _anim.SetTrigger("Hit");
@@ -92,7 +88,6 @@ public class DummyPuppet : MonoBehaviour, IDamageable
 
     private void Die()
     {
-        if (_deathVFX != null) Instantiate(_deathVFX, transform.position, Quaternion.identity).Play();
         if (_deathSFX != null) _audio.PlayOneShot(_deathSFX);
 
         _anim.SetTrigger("Die");
