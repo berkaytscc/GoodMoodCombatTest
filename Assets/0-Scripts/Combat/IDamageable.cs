@@ -1,6 +1,3 @@
-/// <summary>
-/// Anything that can take damage implements this.
-/// </summary>
 public interface IDamageable
 {
     /// <summary>

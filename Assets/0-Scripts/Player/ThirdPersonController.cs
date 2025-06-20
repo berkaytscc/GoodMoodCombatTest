@@ -22,7 +22,6 @@ public class ThirdPersonController : MonoBehaviour
 
     [SerializeField] private Transform lockOnTarget;
 
-    // --- Combo/Attack System ---
     [Header("Combat Settings")]
     [SerializeField] private int _maxCombo = 3;
     [SerializeField] private float _comboResetTime = 1.0f; // Time window to chain next attack

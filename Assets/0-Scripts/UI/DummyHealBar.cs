@@ -21,7 +21,6 @@ public class DummyHealthBar : UIElement
 
         if (_dummyPuppet == null)
         {
-            Debug.LogError("DummyHealthBar: no DummyPuppet assigned", this);
             gameObject.SetActive(false);
             return;
         }
