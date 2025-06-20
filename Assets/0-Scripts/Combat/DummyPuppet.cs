@@ -56,9 +56,9 @@ public class DummyPuppet : MonoBehaviour, IDamageable
         }
     }
 
-    public void TakeDamage(float amount)
+    public bool TryTakeDamage(float amount)
     {
-        if (_currentHealth <= 0f) return;
+        if (_currentHealth <= 0f) return false;
 
         _currentHealth = Mathf.Max(_currentHealth - amount, 0f);
 
@@ -86,6 +86,8 @@ public class DummyPuppet : MonoBehaviour, IDamageable
         _anim.SetBool("CanRespawn", false);
         if (_currentHealth <= 0f)
             Die();
+
+        return true;
     }
 
     private void Die()

@@ -7,5 +7,5 @@ public interface IDamageable
     /// Apply damage to this object.
     /// </summary>
     /// <param name="amount">Damage amount (positive).</param>
-    void TakeDamage(float amount);
+    public bool TryTakeDamage(float amount);
 }

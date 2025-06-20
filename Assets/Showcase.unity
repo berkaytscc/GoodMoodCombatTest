@@ -24,7 +24,7 @@ RenderSettings:
   m_AmbientEquatorColor: {r: 0.114, g: 0.125, b: 0.133, a: 1}
   m_AmbientGroundColor: {r: 0.047, g: 0.043, b: 0.035, a: 1}
   m_AmbientIntensity: 1
-  m_AmbientMode: 4
+  m_AmbientMode: 0
   m_SubtractiveShadowColor: {r: 0.42, g: 0.478, b: 0.627, a: 1}
   m_SkyboxMaterial: {fileID: 0}
   m_HaloStrength: 1
@@ -10957,7 +10957,7 @@ AudioSource:
   m_audioClip: {fileID: 0}
   m_Resource: {fileID: 0}
   m_PlayOnAwake: 0
-  m_Volume: 1
+  m_Volume: 0.65
   m_Pitch: 1
   Loop: 0
   Mute: 0
@@ -12045,6 +12045,7 @@ MonoBehaviour:
   DamageLayer:
     serializedVersion: 2
     m_Bits: 64
+  _basicHitParticle: {fileID: 5991545297567742199, guid: 36a3ddd9e9258474aa29a08939eeda45, type: 3}
 --- !u!65 &2047494532
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -12349,6 +12350,14 @@ PrefabInstance:
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 3661757331655558594, guid: 0331b169005eb1d469455efaa6b9024a, type: 3}
+      propertyPath: _hitSFX
+      value: 
+      objectReference: {fileID: 8300000, guid: 44653a39efdceef4d8eba46ddbcd997e, type: 3}
+    - target: {fileID: 3661757331655558594, guid: 0331b169005eb1d469455efaa6b9024a, type: 3}
+      propertyPath: _deathSFX
+      value: 
+      objectReference: {fileID: 8300000, guid: e5c8a1155a9b45d488038b0136d62c1d, type: 3}
+    - target: {fileID: 3661757331655558594, guid: 0331b169005eb1d469455efaa6b9024a, type: 3}
       propertyPath: _damageNumberPrefab
       value: 
       objectReference: {fileID: 1133474574887867833, guid: 6c309bf1b58b8f64ab25c9ac007791d0, type: 3}
@@ -12406,6 +12415,14 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5360683131785772904, guid: 0331b169005eb1d469455efaa6b9024a, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6415281488327729795, guid: 0331b169005eb1d469455efaa6b9024a, type: 3}
+      propertyPath: m_Volume
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 6415281488327729795, guid: 0331b169005eb1d469455efaa6b9024a, type: 3}
+      propertyPath: m_PlayOnAwake
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6774080502169825540, guid: 0331b169005eb1d469455efaa6b9024a, type: 3}
